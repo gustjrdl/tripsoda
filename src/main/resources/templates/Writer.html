@@ -1,0 +1,56 @@
+<html layout:decorate="~{layout}">
+
+
+<div layout:fragment="content">
+    <nav th:replace="SignNavBar :: SignNavBarFragment"></nav>
+<!--텍스트-->
+    <div class="writer-template">
+    <!--      제목-->
+        <form class="writer-article" th:object="${communityForm}"method="post" enctype="multipart/form-data">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+            <div class="writer-article-region">
+                <div class="writer-article-region-line">
+                    <div th:if="${#fields.hasAnyErrors()}">
+                        <div class="alert" role="alert" th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+                    </div>
+                    <input type="radio" th:value="인천" class="incheon" name="region" id="incheon" th:field="*{region}">인천</input>
+                    <input type="radio" th:value="서울" class="incheon" name="region" id="seoul" th:field="*{region}">서울</input>
+                    <input type="radio" th:value="대전" class="incheon" name="region" id="daejeon" th:field="*{region}">대전</input>
+                    <input type="radio" th:value="대구" class="incheon" name="region" id="daegu" th:field="*{region}">대구</input>
+                    <a id="button"></a>
+                </div>
+            </div>
+
+            <textarea class="writer-article-subject" type="text" name="subject" id="subject" th:field="*{subject}"></textarea>
+    <!--        내용-->
+            <textarea class="writer-article-content" name="content" id="content" th:field="*{content}"></textarea>
+
+            <input id="files" name="files" type="file" multiple="multiple" class="select-image" accept="img/webp">
+    <!--        저장하기버튼-->
+            <input class="writer-submit-button"type="submit" value="저장하기">
+        </form>
+    </div>
+    <script type="text/javascript">
+
+    const formData = new FormData();
+
+    const files = document.getElementById("files");
+    const subject = document.getElementById("subject");
+    const content = document.getElementById("content");
+
+    formData.append("files",files);
+    formData.append("subject",subject);
+    formData.append("content",content);
+
+    files.onchange = function(e) {
+
+        for(let i = 0; i<e.target.files.length; i++){
+            formData.append("files",e.target.files[i]);
+            console.log(e.target.files[i]);
+        }
+
+    }
+    </script>
+</div>
+
+</html>
