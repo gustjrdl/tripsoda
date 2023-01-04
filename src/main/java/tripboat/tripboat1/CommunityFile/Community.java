@@ -1,8 +1,10 @@
 package tripboat.tripboat1.CommunityFile;
 
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
+import org.springframework.lang.Nullable;
 import tripboat.tripboat1.CommentFile.Comment;
-import tripboat.tripboat1.CommunityFile.CommunityImg.ArticleImageDto;
+//import tripboat.tripboat1.CommunityFile.CommunityImg.ArticleImageDto;
 import tripboat.tripboat1.CommunityFile.CommunityImg.Image;
 import tripboat.tripboat1.User.SiteUser;
 
@@ -43,8 +45,10 @@ public class Community {
     @ManyToOne
     private SiteUser author;
 
-    @OneToMany(mappedBy = "article")
+    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
     private List<Image> images;
 
 
+    @Column(columnDefinition = "Integer default 0", nullable = false)
+    private int view;
 }

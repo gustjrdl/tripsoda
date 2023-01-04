@@ -21,10 +21,12 @@ public class AwsService {
 
     public String sendFileToS3Bucket (MultipartFile file) throws IOException {
         String originalFilename = file.getOriginalFilename();
-
         String ext = originalFilename.substring(originalFilename.lastIndexOf("."));
         String filename = UUID.randomUUID().toString();
+
         filename += filename + ext;
+
+        System.out.println("ext"+ext);
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(file.getInputStream().available());

@@ -1,9 +1,33 @@
 <div th:text="${name}"></div>
 
 
+<div th:each="Community : ${community}">
+    <div th:if="${name.id} == ${Community.author.id}">
+        <a th:href="@{|/community/detail/${Community.id}|}" th:text="${Community.subject}"></a>
+        <a th:href="@{|/community/detail/${Community.id}|}" th:text="${Community.content}"></a>
+        <a th:href="@{|/community/detail/${Community.id}|}" th:text="${Community.author.nickname}"></a>
+    </div>
 </div>
-<div th:text="${user}"></div>
 
+<!--<div th:if="${!paging.isEmpty()}">-->
+<!--    <ul class="pagination justify-content-center">-->
+<!--        <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">-->
+<!--            <a class="page-link"-->
+<!--               th:href="@{|?page=${paging.number-1}|}">-->
+<!--                <span>이전</span>-->
+<!--            </a>-->
+<!--        </li>-->
 
-
-<!--<div th:text="${name.content}"></div>-->
+<!--        <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"-->
+<!--            th:if="${page >= paging.number-4 and page <= paging.number+4}"-->
+<!--            th:classappend="${page == paging.number} ? 'active'"-->
+<!--            class="page-item">-->
+<!--            <a th:text="${page+1}" class="page-link" th:href="@{|?page=${page}|}"></a>-->
+<!--        </li>-->
+<!--        <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">-->
+<!--            <a class="page-link" th:href="@{|?page=${paging.number+1}|}">-->
+<!--                <span>다음</span>-->
+<!--            </a>-->
+<!--        </li>-->
+<!--    </ul>-->
+<!--</div>-->

@@ -27,8 +27,6 @@ public class ArticleImageService {
 
         return dto;
     }
-
-
     public void setCommunityImageArticle(Community community, List<Long> imageIdList) {
         List<Image> imageList = articleImageRepository.findByIdIn(imageIdList);
 

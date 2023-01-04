@@ -9,13 +9,17 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import tripboat.tripboat1.CommentFile.Comment;
+import tripboat.tripboat1.CommunityFile.CommunityImg.ArticleImageDto;
+import tripboat.tripboat1.CommunityFile.CommunityImg.ArticleImageRepository;
 import tripboat.tripboat1.CommunityFile.CommunityImg.ArticleImageService;
 import tripboat.tripboat1.CommunityFile.CommunityImg.Image;
 import tripboat.tripboat1.User.SiteUser;
 import tripboat.tripboat1.Util.DataNotFoundException;
 
 
+import javax.persistence.JoinColumn;
 import javax.persistence.criteria.*;
+import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,30 +32,16 @@ public class CommunityService {
 
     private final CommunityRepository communityRepository;
     private final ArticleImageService articleImageService;
+    private final ArticleImageRepository articleImageRepository;
 
-
-    public List<CommunityDto> getAllArticles() {
-        return communityRepository.findAll()
-                .stream()
-                .map(community -> {
-                    CommunityDto communityDto = new CommunityDto(community);
-                    return communityDto;
-                })
-                .collect(Collectors.toList());
-    }
 
     public Page<Community> getList(int page, String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
         Specification<Community> spec = search(kw);
-        return this.communityRepository.findAll(spec,pageable);
-    }
 
-    public CommunityDto getArticle(Integer id) {
-        Community community = communityRepository.findById(id).orElseThrow();
-        CommunityDto articleDto = new CommunityDto(community);
-        return articleDto;
+        return this.communityRepository.findAll(spec,pageable);
     }
 
     public Community create(CommunityForm communityForm,SiteUser nickname) {
@@ -82,7 +72,10 @@ public class CommunityService {
     public Community getCommunity(Integer id) {
         Optional<Community> community = this.communityRepository.findById(id);
         if (community.isPresent()) {
-            return community.get();
+            Community community1= community.get();
+            community1.setView(community.get().getView()+1);
+            this.communityRepository.save(community1);
+            return community1;
         } else {
             throw new DataNotFoundException("community not found");
         }
@@ -93,16 +86,21 @@ public class CommunityService {
             private static final long serialVersionUID = 1L;
             @Override
             public Predicate toPredicate(Root<Community> q, CriteriaQuery<?> query, CriteriaBuilder cb) {
-                query.distinct(true);  // 중복을 제거
+
+                        query.distinct(true);  // 중복을 제거
                 Join<Community, SiteUser> s1 = q.join("author", JoinType.LEFT);
                 Join<Community, Comment> s2 = q.join("commentList", JoinType.LEFT);
                 Join<Comment, SiteUser> s3 = s2.join("author", JoinType.LEFT);
+
                 return cb.or(cb.like(q.get("subject"), "%" + kw + "%"), // 제목
-//                        cb.like(s1.get("content"), "%" + kw + "%"),      // 내용
+                        cb.like(q.get("content"), "%" + kw + "%"),      // 내용
+                        cb.like(q.get("region"), "%" + kw + "%"),      // 지역
                         cb.like(s1.get("nickname"), "%" + kw + "%"),    // 질문 작성자
                         cb.like(s2.get("content"), "%" + kw + "%"),      // 답변 내용
                         cb.like(s3.get("username"), "%" + kw + "%"));   // 답변 작성자
             }
         };
     }
+
+
 }

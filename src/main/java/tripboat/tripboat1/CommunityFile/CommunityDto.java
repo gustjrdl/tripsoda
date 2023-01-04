@@ -28,8 +28,9 @@ public class CommunityDto {
     private LocalDateTime updatedDate;
 
     private Boolean isTemp;
-
     private List<ArticleImageDto> imageList;
+
+    private Integer view;
 
 
     public CommunityDto(Community community) {
@@ -41,6 +42,9 @@ public class CommunityDto {
         this.content = community.getContent();
 
         this.createDate = community.getCreateDate();
+
+        this.view = community.getView();
+
 
         List<ArticleImageDto> articleImageDtoList = community.getImages()
                 .stream()

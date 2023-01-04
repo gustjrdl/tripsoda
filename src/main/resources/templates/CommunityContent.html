@@ -4,7 +4,7 @@
     <div layout:fragment="content">
         <nav th:replace="NavBar :: NavBarFragment"></nav>
 
-        <div class="community-content-container">
+        <div class="community-content-container" >
         <!--    글 상세-->
             <div class="content-line">
                 <div class="content-article">
@@ -17,8 +17,6 @@
                         <h3 class="content-article-mean" th:text="${community.content}"></h3>
                         <h5 th:text="${#temporals.format(community.createDate, 'yyyy-MM-dd HH:mm')}"></h5>
                         <div th:each="url : ${community.images}">
-
-                            <div th:text="${url.imgUrl}"></div>
                             <img th:src="${url.imgUrl}" alt="fuck" >
                         </div>
                     </div>
@@ -44,10 +42,12 @@
         </div>
     <!--    코멘트시작-->
         <div class="comment-container">
-            <div th:text="|${#lists.size(community.commentList)}개의 답변이 있습니다.|" style=""></div>
+
             <!--        코멘트 갯수-->
+            <div th:text="|${#lists.size(community.commentList)}개의 답변이 있습니다.|" style=""></div>
+
+            <!--        코멘트 등록-->
             <div class="comment-writer">
-                <!--        코멘트 등록-->
                 <form class="comment-writer-line" th:action="@{|/comment/create/${community.id}|}" th:object="${commentForm}" method="post">
                     <textarea th:field="*{content}" name="content" id="content" placeholder="댓글을 입력해주세요.">
                     </textarea>
@@ -82,7 +82,7 @@
     </div>
 </body>
 </html>
-<script layout:fragment="script" type='text/javascript' th:inline="javascript">
+<script layout:fragment="script" type='text/javascript'>
     const delete_elements = document.getElementsByClassName("delete");
 
     Array.from(delete_elements).forEach(function(element) {
@@ -92,7 +92,5 @@
             };
         });
     });
-
-
 
 </script>

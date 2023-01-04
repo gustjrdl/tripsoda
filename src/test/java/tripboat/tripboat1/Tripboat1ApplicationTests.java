@@ -8,6 +8,7 @@ class Tripboat1ApplicationTests {
 
 	@Test
 	void contextLoads() {
+
 	}
 
 }

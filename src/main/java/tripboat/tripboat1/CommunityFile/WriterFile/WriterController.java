@@ -63,14 +63,14 @@ public class WriterController {
     public String WriterDate (@Valid CommunityForm communityForm, BindingResult bindingResult, Principal principal,
                               @RequestParam(value="files",required = false) List<MultipartFile> files) throws IOException {
 
-
         Community article = communityService.create(communityForm,userService.getUser(principal.getName()));
 
         if (bindingResult.hasErrors()) return "Writer";
 
-        if(files == null) {return "redirect:/community";}
-
-        else if (files!=null) {
+        if(files == null) {
+            communityService.create(communityForm, userService.getUser(principal.getName()));
+        }
+        else {
             files.stream()
                     .forEach(file -> {
                         try {
@@ -81,8 +81,10 @@ public class WriterController {
                         }
                     });
         }
-        {return "redirect:/community";}
+
+        return "redirect:/community";
     }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{id}")
     public String communityModify(CommunityForm communityForm, @PathVariable("id") Integer id, Principal principal) {
@@ -117,6 +119,7 @@ public class WriterController {
     @GetMapping("/delete/{id}")
     public String communitydelete(Principal principal, @PathVariable("id") Integer id) {
         Community community = this.communityService.getCommunity(id);
+
         if (!community.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
         }

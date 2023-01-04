@@ -20,11 +20,14 @@
                     <div class="article_subject" th:text="${Community.subject}"></div>
                     <div class="article_content" th:text="${Community.content}"></div>
                     <div class="article_nickname-box">
+
                         <div th:if="${Community.author}!=null" th:text="${Community.author.nickname}"></div>
+
                         <div class="article_comment">
+                            <i class="bi bi-eye"></i>
+                            <div th:text="${Community.view}"></div>
                             <i class="bi bi-chat-left"></i>
                             <div th:text="${#lists.size(Community.commentList)}"></div>
-
                         </div>
                     </div>
                 </a>
