@@ -78,6 +78,7 @@
     margin-right:5px;
 }
 
+
 .article_subject {
     font-weight:bold;
     width:100%;
@@ -106,10 +107,16 @@
     display:flex;
     justify-content:space-between;
 }
+
 .article_comment {
     display:flex;
 }
 .article_comment > div {
     margin-left:5px;
 }
+.bi bi-eye {
+    margin-right:8px;
+}
+
+
 

@@ -54,14 +54,11 @@ public class CommentController {
         this.commentService.create(community, content, siteUser);
         return String.format("redirect:/community/detail/%s", id);
     }
-
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{id}")
     public String commentModify(CommentForm commentForm, @PathVariable("id") Integer id, @RequestParam(value="page", defaultValue="0") int page, Principal principal) {
 
         List<Comment> comment = this.commentService.getComment(commentForm, id);
-
-
         return "CommentEdit";
     }
 
