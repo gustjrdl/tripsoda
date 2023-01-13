@@ -9,7 +9,5 @@ import tripboat.tripboat1.CommunityFile.Community;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Integer> {
-
-    Page<Comment> findAll(Pageable pageable);
-    Page<Comment> findAll(Specification<Comment> spec, org.springframework.data.domain.Pageable pageable);
+    List<Comment> findAllById(Integer id);
 }

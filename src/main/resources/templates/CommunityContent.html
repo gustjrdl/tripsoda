@@ -14,6 +14,7 @@
                             <div>지역</div>
                             <div th:text="${community.region}"></div>
                         </div>
+
                         <h3 class="content-article-mean" th:text="${community.content}"></h3>
                         <h5 th:text="${#temporals.format(community.createDate, 'yyyy-MM-dd HH:mm')}"></h5>
                         <div th:each="url : ${community.images}">
@@ -21,7 +22,12 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="content-profile">
+                        <form th:action="@{|/user/${community.author.nickname}|}"  method="post" >
+                            <input type="hidden" th:text="${community.author.nickname}" th:name="userNickname" th:value="${community.author.nickname}">
+                            <input type="submit">
+                        </form>
                 </div>
             </div>
         <!--    글 상세 끝-->
@@ -44,7 +50,7 @@
         <div class="comment-container">
 
             <!--        코멘트 갯수-->
-            <div th:text="|${#lists.size(community.commentList)}개의 답변이 있습니다.|" style=""></div>
+            <div th:text="|${#lists.size(community.commentList)}개의 답변이 있습니다.|"></div>
 
             <!--        코멘트 등록-->
             <div class="comment-writer">
@@ -64,10 +70,9 @@
                 <div class="comment-date" th:text="${#temporals.format(comment.createDate, 'yyyy-MM-dd HH:mm')}"></div>
                 <div th:text="${comment.content}" style="display:inline-block;"></div>
                 <!--        코멘트 정보 및 내용-->
-
                 <div class="comment-patch">
                     <a class="comment-edit"
-                       a th:href="@{|/comment/modify/${comment.id}|}"
+                       th:href="@{|/comment/modify/${comment.id}|}"
                        sec:authorize="isAuthenticated()"
                        th:if="${comment.author != null and #authentication.getPrincipal().getUsername() == comment.author.username}"
                        th:text="수정"></a>

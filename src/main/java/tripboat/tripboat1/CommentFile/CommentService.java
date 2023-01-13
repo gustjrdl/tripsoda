@@ -25,7 +25,6 @@ public class CommentService {
 
     public void create(Community community, String content, SiteUser author) {
         Comment cmt = new Comment();
-
         cmt.setContent(content);
         cmt.setCreateDate(LocalDateTime.now());
         cmt.setCommunity(community);
@@ -33,14 +32,22 @@ public class CommentService {
         this.commentRepository.save(cmt);
     }
 
-    public List<Comment> getComment(Integer id) {
+//    public Page<Comment> getList(int page, int id) {
+//        List<Sort.Order> sorts = new ArrayList<>();
+//        sorts.add(Sort.Order.desc("createDate"));
+//        Pageable pageable = PageRequest.of(page, 20, Sort.by(sorts));
+//
+//        return this.commentRepository.findAll(pageable);
+//    }
 
-        List<Comment> list = commentRepository.findAll(Sort.by(Sort.Direction.DESC, "createDate"));
+    public List<Comment> getComment(CommentForm commentForm, int id) {
 
-       return list;
+        commentForm.getContent();
+
+        return this.commentRepository.findAllById(id);
     }
 
-    public void modify(List<Comment> comment, String content,int id) {
+    public void modify(List<Comment> comment, String content, int id) {
         comment.get(id).setContent(content);
         comment.get(id).setModifyDate(LocalDateTime.now());
         this.commentRepository.save(comment.get(id));

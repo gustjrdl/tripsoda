@@ -53,7 +53,6 @@ public class CommunityController {
     @GetMapping("/detail/{id}")
     private String detail(Model model, @PathVariable("id") Integer id, CommentForm commentForm,  @RequestParam(value="page", defaultValue="0") int page, @RequestParam(value = "kw", defaultValue = "") String kw) {
 
-
         Community community = this.communityService.getCommunity(id);
         Page<Community> paging = this.communityService.getList(page, kw);
 
@@ -63,4 +62,6 @@ public class CommunityController {
 
         return "CommunityContent";
     }
+
+
 }

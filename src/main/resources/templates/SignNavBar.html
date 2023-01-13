@@ -8,7 +8,6 @@
       <nav class="sign-home-logo">
         <a class="nav-link" th:href="@{/main}">Trip Soda</a>
       </nav>
-
       <nav class="sign-navbar">
         <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/user/login}" style=" font-weight:bold; font-size:18px;">로그인</a>
         <a class="nav-link" sec:authorize="isAnonymous()" th:href="@{/user/signup}" style="font-weight:bold; font-size:18px; " >회원가입</a>

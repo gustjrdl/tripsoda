@@ -2,12 +2,14 @@
 
 
 <div th:each="Community : ${community}">
-    <div th:if="${name.id} == ${Community.author.id}">
+    <input type="checkbox">
+    <div th:if="${name.nickname} == ${Community.author.nickname}" style="border:solid 2px red;">
         <a th:href="@{|/community/detail/${Community.id}|}" th:text="${Community.subject}"></a>
         <a th:href="@{|/community/detail/${Community.id}|}" th:text="${Community.content}"></a>
         <a th:href="@{|/community/detail/${Community.id}|}" th:text="${Community.author.nickname}"></a>
     </div>
 </div>
+
 
 <!--<div th:if="${!paging.isEmpty()}">-->
 <!--    <ul class="pagination justify-content-center">-->

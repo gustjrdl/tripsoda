@@ -14,13 +14,13 @@ public class ArticleImageService {
 
     private final ArticleImageRepository articleImageRepository;
 
-    public ArticleImageDto communityImageDto(String imgUrl, Community community) {
+    public ArticleImageDto articleImageDto(String imgUrl, Community community) {
+
         Image image = Image.builder()
                 .imgUrl(imgUrl)
                 .article(community)
                 .createDate(LocalDateTime.now())
                 .build();
-
         Image image1 = articleImageRepository.save(image);
 
         ArticleImageDto dto = new ArticleImageDto(image1);

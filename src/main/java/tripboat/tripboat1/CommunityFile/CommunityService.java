@@ -38,12 +38,21 @@ public class CommunityService {
     public Page<Community> getList(int page, String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        Pageable pageable = PageRequest.of(page, 50, Sort.by(sorts));
         Specification<Community> spec = search(kw);
 
         return this.communityRepository.findAll(spec,pageable);
     }
 
+    public void sangsung( String subject, String content){
+        Community community = new Community();
+
+        community.setSubject(subject);
+        community.setContent(content);
+        community.setModifyDate(LocalDateTime.now());
+        this.communityRepository.save(community);
+
+    }
     public Community create(CommunityForm communityForm,SiteUser nickname) {
         Community community = Community.builder()
                 .subject(communityForm.getSubject())

@@ -2,6 +2,7 @@ package tripboat.tripboat1.CommunityFile;
 
 import lombok.Getter;
 import lombok.Setter;
+import tripboat.tripboat1.CommentFile.Comment;
 import tripboat.tripboat1.CommunityFile.CommunityImg.ArticleImageDto;
 import tripboat.tripboat1.User.SiteUser;
 
@@ -19,6 +20,7 @@ public class CommunityDto {
 
     private String subject;
 
+    private List<Comment> commentList;
     private String content;
 
     private SiteUser author;
@@ -40,6 +42,8 @@ public class CommunityDto {
         this.subject = community.getSubject();
 
         this.content = community.getContent();
+
+        this.commentList = community.getCommentList();
 
         this.createDate = community.getCreateDate();
 

@@ -24,4 +24,7 @@ public class Image {
 
     @ManyToOne
     private Community article;
+
+
 }
+

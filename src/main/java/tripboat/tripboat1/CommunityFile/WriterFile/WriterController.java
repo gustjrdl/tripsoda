@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.server.ResponseStatusException;
 import tripboat.tripboat1.Aws.AwsService;
 import tripboat.tripboat1.CommunityFile.Community;
@@ -29,6 +30,7 @@ import java.nio.file.FileStore;
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -60,29 +62,42 @@ public class WriterController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/content")
-    public String WriterDate (@Valid CommunityForm communityForm, BindingResult bindingResult, Principal principal,
-                              @RequestParam(value="files",required = false) List<MultipartFile> files) throws IOException {
+    public String WriterDate (Model model, @Valid CommunityForm communityForm, BindingResult bindingResult, Principal principal,
+                              @RequestParam(value="files", required = false) List<MultipartFile> files) throws IOException {
 
         Community article = communityService.create(communityForm,userService.getUser(principal.getName()));
-
         if (bindingResult.hasErrors()) return "Writer";
 
-        if(files == null) {
-            communityService.create(communityForm, userService.getUser(principal.getName()));
-        }
-        else {
+        if(!files.isEmpty()) {
             files.stream()
                     .forEach(file -> {
                         try {
-                            String imgUrl = awsService.sendFileToS3Bucket(file);
-                            articleImageService.communityImageDto(imgUrl, article);
+                            int checkNum = 1;
+
+                            if (file.isEmpty()) checkNum = 0;
+
+                            if (checkNum == 1) {
+
+                                String imgUrl = awsService.sendFileToS3Bucket(file);
+                                model.addAttribute("fileUrl", imgUrl);
+                                articleImageService.articleImageDto(imgUrl, article);
+                            }
+
                         } catch (IOException e) {
                             throw new RuntimeException(e);
                         }
                     });
         }
 
+//        org.springframework.web.multipart.support.StandardMultipartHttpServletRequest$StandardMultipartFile@30300607
+//        org.springframework.web.multipart.support.StandardMultipartHttpServletRequest$StandardMultipartFile@3faafd59
+
+
+        System.out.println("files"+files);
+        System.out.println("files2"+files.isEmpty());
+
         return "redirect:/community";
+
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -92,13 +107,11 @@ public class WriterController {
         if(!community.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
-
         communityForm.setSubject(community.getSubject());
         communityForm.setContent(community.getContent());
         communityForm.setRegion(community.getRegion());
         return "Writer";
     }
-
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
     public String communityMoidify(@Valid CommunityForm communityForm, BindingResult bindingResult,
@@ -111,7 +124,9 @@ public class WriterController {
         if (!community.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
+
         this.communityService.modify(community, communityForm.getSubject(), communityForm.getContent(),communityForm.getRegion());
+
         return String.format("redirect:/community/detail/%s", id);
     }
 
@@ -123,6 +138,7 @@ public class WriterController {
         if (!community.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
         }
+
         this.communityService.delete(community);
         return "redirect:/community";
     }

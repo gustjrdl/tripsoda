@@ -64,6 +64,8 @@ public class UserController {
         return "LoginForm";
     }
 
+
+
     @ResponseBody
     @RequestMapping("/logout")
     public String Logout(HttpSession session) {
@@ -73,6 +75,7 @@ public class UserController {
         str+="</script>";
         return str;
     }
+
 //    @ResponseBody
 //    @RequestMapping("/Sign")
 //    public String Sign(HttpSession session) {

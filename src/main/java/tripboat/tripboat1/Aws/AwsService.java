@@ -24,9 +24,11 @@ public class AwsService {
         String ext = originalFilename.substring(originalFilename.lastIndexOf("."));
         String filename = UUID.randomUUID().toString();
 
-        filename += filename + ext;
 
         System.out.println("ext"+ext);
+
+        filename += filename + ext;
+
 
         ObjectMetadata objectMetadata = new ObjectMetadata();
         objectMetadata.setContentLength(file.getInputStream().available());
