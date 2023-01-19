@@ -41,7 +41,6 @@ public class CommentController {
         SiteUser siteUser = this.userService.getUser(principal.getName());
         Page<Community> paging = this.communityService.getList(page, kw);
 
-
         model.addAttribute("kw", kw);
         model.addAttribute("paging", paging);
 

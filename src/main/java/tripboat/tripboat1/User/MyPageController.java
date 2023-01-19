@@ -39,7 +39,6 @@ public class MyPageController {
                            @RequestParam(value = "kw", defaultValue = "") String kw) {
 
         Page<Community> communityPage = this.communityService.getList(page, kw);
-        System.out.println("앵간하네");
 
         model.addAttribute("community", communityPage);
         return "UserPage";
