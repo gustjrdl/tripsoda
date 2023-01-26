@@ -3,7 +3,10 @@ package tripboat.tripboat1.Aws;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,6 +15,8 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Configuration
+@PropertySource("classpath:awskey.properties")
 public class AwsService {
 
     @Value("${cloud.aws.s3.bucket}")

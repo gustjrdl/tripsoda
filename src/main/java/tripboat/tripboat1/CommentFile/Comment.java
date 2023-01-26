@@ -33,6 +33,4 @@ public class Comment {
 
     private LocalDateTime modifyDate;
 
-
-
 }
